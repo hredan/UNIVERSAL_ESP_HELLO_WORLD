@@ -10,7 +10,7 @@
 #include <Arduino.h>
 #include <Dictionary.h>
 #include "./serial_promt.h"
-#include "./gitignore"
+#include "./eeprom_config.h"
 
 Dictionary *dict = new Dictionary();
 String text = "HELLO WORLD";
