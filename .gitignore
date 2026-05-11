@@ -1,0 +1,11 @@
+Temp
+Archives
+Artifacts
+WithPayload
+/tools
+BIN_*
+CACHE_*
+build
+/EEP
+/*.eep
+.vscode/c_cpp_properties.json

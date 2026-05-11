@@ -1,0 +1,77 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Create Release and upload assets
+
+jobs:
+  release:
+    name: Create Release and upload assets
+    runs-on: ubuntu-latest
+    env:
+        SKETCH_NAME: ESP_Blink 
+        CORE_1: esp8266
+        BOARD_1: d1_mini
+        CORE_2: esp32
+        BOARD_2: d1_mini32
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Get the tag name and prerelease flag
+        #bash string replace pattern /oldstring/newstring
+        run: |
+          TAG=${GITHUB_REF/refs\/tags\//}
+          if [[ ${TAG} == *"prerelease"* ]]; then
+            PRERELEASE=true
+          else
+            PRERELEASE=false
+          fi
+          # add variables to env
+          echo "TAG=${TAG}" >> $GITHUB_ENV
+          echo "PRERELEASE=${PRERELEASE}" >> $GITHUB_ENV
+          echo "TAG: ${TAG}"
+          echo "PRE: ${PRERELEASE}"
+      - name: Build esp8266 binaries and create eep file
+        run: |
+          bash ./ESP_Build_Scripts/build_sketch.sh -s ${{env.SKETCH_NAME}} -c ${{env.CORE_1}} -b ${{env.BOARD_1}} -f 160
+          bash ./ESP_Build_Scripts/create_build_info.sh -s $GITHUB_SHA -r $GITHUB_REPOSITORY -t ${{env.TAG}}
+          bash ./ESP_Build_Scripts/create_eef_package.sh -s ${{env.SKETCH_NAME}} -c ${{env.CORE_1}} -b ${{env.BOARD_1}}
+      - name: Build esp32 binaries and create eep file
+        run: |
+          bash ./ESP_Build_Scripts/build_sketch.sh -s ${{env.SKETCH_NAME}} -c ${{env.CORE_2}} -b ${{env.BOARD_2}} -f 160
+          bash ./ESP_Build_Scripts/create_build_info.sh -s $GITHUB_SHA -r $GITHUB_REPOSITORY -t ${{env.TAG}}
+          bash ./ESP_Build_Scripts/create_eef_package.sh -s ${{env.SKETCH_NAME}} -c ${{env.CORE_2}} -b ${{env.BOARD_2}}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: ${{env.PRERELEASE}}
+      - name: Upload Release Asset esp8266
+        id: upload-release-asset-esp8266 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./${{env.CORE_1}}_${{env.BOARD_1}}_${{env.SKETCH_NAME}}.eep
+          asset_name: ${{env.CORE_1}}_${{env.BOARD_1}}_${{env.SKETCH_NAME}}.eep
+          asset_content_type: application/zip
+      - name: Upload Release Asset esp32
+        id: upload-release-asset-esp32 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./${{env.CORE_2}}_${{env.BOARD_2}}_${{env.SKETCH_NAME}}.eep
+          asset_name: ${{env.CORE_2}}_${{env.BOARD_2}}_${{env.SKETCH_NAME}}.eep
+          asset_content_type: application/zip
