@@ -9,3 +9,4 @@ build
 /EEP
 /*.eep
 .vscode/c_cpp_properties.json
+.venv

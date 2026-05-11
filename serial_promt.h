@@ -3,10 +3,10 @@
 #include <Arduino.h>
 
 struct HelloWorldConfig {
-	bool helloWorldRunning;
-	int ledGpio;
-	bool invertLed;
-	int dit;
+    bool helloWorldRunning;
+    int ledGpio;
+    bool invertLed;
+    int dit;
 };
 
 void initSerialPromt(const HelloWorldConfig &config);

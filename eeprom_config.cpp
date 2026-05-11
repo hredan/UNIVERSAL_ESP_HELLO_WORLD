@@ -1,4 +1,4 @@
-#include "eeprom_config.h"
+#include "./eeprom_config.h"
 
 #include <EEPROM.h>
 

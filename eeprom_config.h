@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include "serial_promt.h"
+#include "./serial_promt.h"
 
 constexpr int EEPROM_SIZE_BYTES = 64;
 

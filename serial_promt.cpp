@@ -1,4 +1,4 @@
-#include "serial_promt.h"
+#include "./serial_promt.h"
 
 namespace {
 String serialInput;
@@ -49,11 +49,27 @@ bool isValidDit(int dit) {
   return dit >= 20 && dit <= 2000;
 }
 
+void printPromptHelp() {
+  Serial.println("[prompt] Available commands:");
+  Serial.println("[prompt]   help                 - Show this help");
+  Serial.println("[prompt]   start                - Start Hello World loop");
+  Serial.println("[prompt]   stop                 - Stop Hello World loop");
+  Serial.println("[prompt]   getLedGpio           - Show current LED GPIO");
+  Serial.println("[prompt]   setLedGpio <n>       - Set LED GPIO to <n>");
+  Serial.println("[prompt]   getLedInvert         - Show LED invert state");
+  Serial.println("[prompt]   toggleLedInvert      - Toggle LED invert state");
+  Serial.println("[prompt]   getDit               - Show Morse dit in ms");
+  Serial.println("[prompt]   setDit <ms>          - Set Morse dit (20..2000)");
+  Serial.println("[prompt]   test_r               - Output Morse R (.-.) once");
+}
+
 void processCommand(String command, HelloWorldConfig &config) {
   command.trim();
   command.toLowerCase();
 
-  if (command == "start") {
+  if (command == "help") {
+    printPromptHelp();
+  } else if (command == "start") {
     config.helloWorldRunning = true;
     Serial.println("[prompt] Hello World loop started");
   } else if (command == "stop") {
@@ -112,13 +128,13 @@ void processCommand(String command, HelloWorldConfig &config) {
     Serial.println("[prompt] Test Morse R (.-.)");
     outputMorseR(config.ledGpio, config.invertLed, config.dit);
   } else if (command.length() > 0) {
-    Serial.println("[prompt] Unknown command. Use: start | stop | getLedGpio | setLedGpio <gpio_number> | getLedInvert | toggleLedInvert | getDit | setDit <milliseconds> | test_r");
+    Serial.println("[prompt] Unknown command. Type 'help' for command list.");
   }
 }
 }  // namespace
 
 void initSerialPromt(const HelloWorldConfig &config) {
-  Serial.println("[prompt] Available commands: start | stop | getLedGpio | setLedGpio <gpio_number> | getLedInvert | toggleLedInvert | getDit | setDit <milliseconds> | test_r");
+  printPromptHelp();
   Serial.printf("[prompt] Current LED GPIO: %d\n", config.ledGpio);
   Serial.printf("[prompt] LED inverted: %s\n", config.invertLed ? "yes" : "no");
   Serial.printf("[prompt] Current dit: %d ms\n", config.dit);

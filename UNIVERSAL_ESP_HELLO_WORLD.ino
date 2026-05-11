@@ -9,8 +9,8 @@
 */
 #include <Arduino.h>
 #include <Dictionary.h>
-#include "serial_promt.h"
-#include "eeprom_config.h"
+#include "./serial_promt.h"
+#include "./gitignore"
 
 Dictionary *dict = new Dictionary();
 String text = "HELLO WORLD";

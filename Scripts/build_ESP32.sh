@@ -4,7 +4,7 @@
 # With GitBash the scripts are working also on Windows.
 
 BUILD_ACTION_DIR="../eep-build-action/"
-SKETCH_NAME="ESP_Blink"
+SKETCH_NAME="UNIVERSAL_ESP_HELLO_WORLD"
 CORE="esp32"
 BOARD="d1_mini32"
 CORE_VERSION=""
