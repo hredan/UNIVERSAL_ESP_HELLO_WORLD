@@ -22,7 +22,7 @@ jobs:
         env:
             SKETCH_NAME: UNIVERSAL_ESP_HELLO_WORLD
         steps:
-          - uses: actions/checkout@v4
+          - uses: actions/checkout@v6
           - uses: hredan/eep-build-action@main
             with:
               sketch-name: ${{env.SKETCH_NAME}}

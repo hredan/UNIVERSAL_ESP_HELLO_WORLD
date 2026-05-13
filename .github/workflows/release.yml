@@ -18,7 +18,7 @@ jobs:
         BOARD_2: d1_mini32
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Get the tag name and prerelease flag
