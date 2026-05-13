@@ -23,6 +23,6 @@ jobs:
     env:
         TARGET: win64
     steps:
-      - uses: hredan/eef-carefree-action@init
+      - uses: hredan/eef-carefree-action@main
         with:
           target-os: ${{env.TARGET}}
