@@ -9,6 +9,7 @@ export INPUT_CORE="esp8266"
 export INPUT_BOARD="d1_mini"
 export INPUT_CORE_VERSION=""
 export INPUT_CPU_F="80"
+export INPUT_FLASH="4M2M"
 export INPUT_LIBS="Dictionary"
 
 URL=$(git remote get-url origin)
