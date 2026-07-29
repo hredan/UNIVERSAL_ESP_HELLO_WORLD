@@ -11,11 +11,6 @@ on:
           default: 'd1_mini32'
           type: string
           required: true
-        core-version:
-          description: 'ESP core version'
-          default: ''
-          type: string
-          required: false
 jobs:
     build_eep:
         runs-on: ubuntu-latest
