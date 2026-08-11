@@ -15,12 +15,6 @@ jobs:
     with:
       core: esp32
       board: esp32
-  build_eep_esp32c2:
-    needs: [test]
-    uses: ./.github/workflows/build_eep.yml
-    with:
-      core: esp32
-      board: esp32c2
   build_eep_esp32c3:
     needs: [test]
     uses: ./.github/workflows/build_eep.yml
@@ -33,6 +27,7 @@ jobs:
     with:
       core: esp32
       board: esp32c5
+      cpu-frequency: 240
   build_eep_esp32c6:
     needs: [test]
     uses: ./.github/workflows/build_eep.yml
@@ -45,12 +40,14 @@ jobs:
     with:
       core: esp32
       board: esp32h2
+      cpu-frequency: 64
   build_eep_esp32p4:
     needs: [test]
     uses: ./.github/workflows/build_eep.yml
     with:
       core: esp32
       board: esp32p4
+      cpu-frequency: 80
   build_eep_esp32s2:
     needs: [test]
     uses: ./.github/workflows/build_eep.yml
@@ -63,9 +60,10 @@ jobs:
     with:
       core: esp32
       board: esp32s3
+      cpu-frequency: 80
   build_EEF_packages:
     runs-on: ubuntu-latest
-    needs: [build_eep_esp32s3, build_eep_esp32s2, build_eep_esp32p4, build_eep_esp32h2, build_eep_esp32c6, build_eep_esp32c5, build_eep_esp32c3, build_eep_esp32c2, build_eep_esp32, build_eep_esp8266]
+    needs: [build_eep_esp32s3, build_eep_esp32s2, build_eep_esp32p4, build_eep_esp32h2, build_eep_esp32c6, build_eep_esp32c5, build_eep_esp32c3, build_eep_esp32, build_eep_esp8266]
     env:
         TARGET: all
     steps:
