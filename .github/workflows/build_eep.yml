@@ -11,6 +11,11 @@ on:
           default: 'd1_mini32'
           type: string
           required: true
+        cpu-frequency:
+          description: 'CPU frequency in MHz (optional)'
+          default: '160'
+          type: string
+          required: false
 jobs:
     build_eep:
         runs-on: ubuntu-latest
@@ -24,4 +29,5 @@ jobs:
               core: ${{ inputs.core }}
               board: ${{ inputs.board}}
               core-version: ${{ inputs.core-version }}
+              cpu-frequency: ${{ inputs.cpu-frequency }}
               libs: "Dictionary"
