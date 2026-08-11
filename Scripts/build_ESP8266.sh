@@ -19,4 +19,5 @@ HASH=$(git rev-parse HEAD)
 #$BUILD_ACTION_DIR/build_sketch.sh -s $INPUT_SKETCH_NAME -c $INPUT_CORE -b $INPUT_BOARD -f $INPUT_CPU_F -l $INPUT_LIBS
 python3 $BUILD_ACTION_DIR/build_sketch.py
 $BUILD_ACTION_DIR/create_build_info.sh -r $URL -s $HASH
-$BUILD_ACTION_DIR/create_eep_package.sh -s $INPUT_SKETCH_NAME -c $INPUT_CORE -b $INPUT_BOARD
+MCU=$(python3 $BUILD_ACTION_DIR/get_mcu.py -c $INPUT_CORE -b $INPUT_BOARD)
+$BUILD_ACTION_DIR/create_eep_package.sh -s $INPUT_SKETCH_NAME -c $MCU -b $INPUT_BOARD
