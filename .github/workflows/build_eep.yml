@@ -31,3 +31,4 @@ jobs:
               core-version: ${{ inputs.core-version }}
               cpu-frequency: ${{ inputs.cpu-frequency }}
               libs: "Dictionary"
+              fqbn-ext: "CDCOnBoot=cdc"
