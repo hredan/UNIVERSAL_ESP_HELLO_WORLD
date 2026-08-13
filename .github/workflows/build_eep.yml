@@ -16,6 +16,11 @@ on:
           default: '160'
           type: string
           required: false
+        fqbn-ext:
+          description: 'Additional FQBN parameters (optional)'
+          default: ''
+          type: string
+          required: false
 jobs:
     build_eep:
         runs-on: ubuntu-latest
@@ -28,7 +33,6 @@ jobs:
               sketch-name: ${{env.SKETCH_NAME}}
               core: ${{ inputs.core }}
               board: ${{ inputs.board}}
-              core-version: ${{ inputs.core-version }}
               cpu-frequency: ${{ inputs.cpu-frequency }}
               libs: "Dictionary"
-              fqbn-ext: "CDCOnBoot=cdc"
+              fqbn-ext: ${{ inputs.fqbn-ext }}
