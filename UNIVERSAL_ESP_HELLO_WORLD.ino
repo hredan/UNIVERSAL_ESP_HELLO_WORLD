@@ -74,13 +74,32 @@ void setup() {
   pinMode(serialPromtConfig.ledGpio, OUTPUT);
   initSerialPromt(serialPromtConfig);
 
-  dict->insert("H", "....");
-  dict->insert("E", ".");
-  dict->insert("L", ".-..");
-  dict->insert("O", "---");
-  dict->insert("W", ".--");
-  dict->insert("R", ".-.");
+  dict->insert("A", ".-");
+  dict->insert("B", "-...");
+  dict->insert("C", "-.-.");
   dict->insert("D", "-..");
+  dict->insert("E", ".");
+  dict->insert("F", "..-.");
+  dict->insert("G", "--.");
+  dict->insert("H", "....");
+  dict->insert("I", "..");
+  dict->insert("J", ".---");
+  dict->insert("K", "-.-");
+  dict->insert("L", ".-..");
+  dict->insert("M", "--");
+  dict->insert("N", "-.");
+  dict->insert("O", "---");
+  dict->insert("P", ".--.");
+  dict->insert("Q", "--.-");
+  dict->insert("R", ".-.");
+  dict->insert("S", "...");
+  dict->insert("T", "-");
+  dict->insert("U", "..-");
+  dict->insert("V", "...-");
+  dict->insert("W", ".--");
+  dict->insert("X", "-..-");
+  dict->insert("Y", "-.--");
+  dict->insert("Z", "--..");
   dict->insert(" ", " ");
 }
 
