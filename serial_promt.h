@@ -7,6 +7,7 @@ struct HelloWorldConfig {
     int ledGpio;
     bool invertLed;
     int dit;
+    String text;
 };
 
 void initSerialPromt(const HelloWorldConfig &config);

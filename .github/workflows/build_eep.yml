@@ -11,8 +11,13 @@ on:
           default: 'd1_mini32'
           type: string
           required: true
-        core-version:
-          description: 'ESP core version'
+        cpu-frequency:
+          description: 'CPU frequency in MHz (optional)'
+          default: '160'
+          type: string
+          required: false
+        fqbn-ext:
+          description: 'Additional FQBN parameters (optional)'
           default: ''
           type: string
           required: false
@@ -23,10 +28,11 @@ jobs:
             SKETCH_NAME: UNIVERSAL_ESP_HELLO_WORLD
         steps:
           - uses: actions/checkout@v6
-          - uses: hredan/eep-build-action@main
+          - uses: hredan/eep-build-action@v1.0.0
             with:
               sketch-name: ${{env.SKETCH_NAME}}
               core: ${{ inputs.core }}
               board: ${{ inputs.board}}
-              core-version: ${{ inputs.core-version }}
+              cpu-frequency: ${{ inputs.cpu-frequency }}
               libs: "Dictionary"
+              fqbn-ext: ${{ inputs.fqbn-ext }}

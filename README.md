@@ -6,5 +6,25 @@ The ESP_HELLO_WORLD example it self, is sending a "Hello World" as Morse Code by
 
 [Morse Code](https://en.wikipedia.org/wiki/Morse_code)
 
+## Serial prompt commands
+The device exposes a simple command prompt over the serial interface. The available commands are:
+
+- `help` - Show the full command list
+- `start` - Start the Hello World loop
+- `stop` - Stop the Hello World loop
+- `getLedGpio` - Show the current LED GPIO pin
+- `setLedGpio <n>` - Set the LED GPIO pin
+- `getLedInvert` - Show whether the LED signal is inverted
+- `toggleLedInvert` - Toggle the LED invert state
+- `getDit` - Show the current Morse dit length in milliseconds
+- `setDit <ms>` - Set the Morse dit length (valid range: 20..2000)
+- `getText` - Show the current text to transmit
+- `setText <text>` - Set the text to transmit over Morse code
+- `test_r` - Output the Morse pattern for `R` once
+
+The default text is `Hello World`.
+
+The prompt is available in the serial monitor at startup and can be used to reconfigure the LED pin, invert behavior, timing or message text without recompiling the firmware.
+
 # Disclaimer
 All this code is released under the GPL, and all of it is to be used at your own risk. If you find any bugs, please let me know via the GitHub issue tracker or drop me an email ([hredan@sleepuino.de](mailto:hredan@sleepuino.de)).

@@ -13,7 +13,7 @@
 #include "./eeprom_config.h"
 
 Dictionary *dict = new Dictionary();
-String text = "HELLO WORLD";
+constexpr char DEFAULT_TEXT[] = "Hello World";
 #ifndef LED_BUILTIN
 constexpr int DEFAULT_LED_GPIO = 2;
 #else
@@ -32,7 +32,8 @@ HelloWorldConfig serialPromtConfig = {
   true,
   DEFAULT_LED_GPIO,
   DEFAULT_INVERT_LED,
-  DEFAULT_DIT_MS
+  DEFAULT_DIT_MS,
+  String(DEFAULT_TEXT)
 };
 
 // https://en.wikipedia.org/wiki/Morse_code#Representation,_timing,_and_speeds
@@ -63,7 +64,7 @@ bool handlePromptAndPersistConfig(HelloWorldConfig &config) {
 
 void setup() {
   Serial.begin(115200);
-  initConfigFromEeprom(serialPromtConfig, DEFAULT_LED_GPIO, DEFAULT_INVERT_LED, DEFAULT_DIT_MS);
+  initConfigFromEeprom(serialPromtConfig, DEFAULT_LED_GPIO, DEFAULT_INVERT_LED, DEFAULT_DIT_MS, DEFAULT_TEXT);
   updateMorseTimingFromDit(serialPromtConfig);
 
   Serial.println("");
@@ -71,16 +72,36 @@ void setup() {
   Serial.printf("Built-in LED on GPIO PIN: %d\n", serialPromtConfig.ledGpio);
   Serial.printf("LED inverted: %s\n", serialPromtConfig.invertLed ? "yes" : "no");
   Serial.printf("dit speed: %d ms\n", serialPromtConfig.dit);
+  Serial.printf("text: %s\n", serialPromtConfig.text.c_str());
   pinMode(serialPromtConfig.ledGpio, OUTPUT);
   initSerialPromt(serialPromtConfig);
 
-  dict->insert("H", "....");
-  dict->insert("E", ".");
-  dict->insert("L", ".-..");
-  dict->insert("O", "---");
-  dict->insert("W", ".--");
-  dict->insert("R", ".-.");
+  dict->insert("A", ".-");
+  dict->insert("B", "-...");
+  dict->insert("C", "-.-.");
   dict->insert("D", "-..");
+  dict->insert("E", ".");
+  dict->insert("F", "..-.");
+  dict->insert("G", "--.");
+  dict->insert("H", "....");
+  dict->insert("I", "..");
+  dict->insert("J", ".---");
+  dict->insert("K", "-.-");
+  dict->insert("L", ".-..");
+  dict->insert("M", "--");
+  dict->insert("N", "-.");
+  dict->insert("O", "---");
+  dict->insert("P", ".--.");
+  dict->insert("Q", "--.-");
+  dict->insert("R", ".-.");
+  dict->insert("S", "...");
+  dict->insert("T", "-");
+  dict->insert("U", "..-");
+  dict->insert("V", "...-");
+  dict->insert("W", ".--");
+  dict->insert("X", "-..-");
+  dict->insert("Y", "-.--");
+  dict->insert("Z", "--..");
   dict->insert(" ", " ");
 }
 
@@ -93,11 +114,15 @@ void loop() {
 
   Serial.println("Start Hello World loop");
   delay(2000);
-  for (int i = 0; i < text.length(); i++) {
+
+  String textToSend = serialPromtConfig.text;
+  textToSend.toUpperCase();
+
+  for (int i = 0; i < textToSend.length(); i++) {
     if (!handlePromptAndPersistConfig(serialPromtConfig)) {
       return;
     }
-    String letter = text.substring(i, i + 1);
+    String letter = textToSend.substring(i, i + 1);
     String morse = dict->search(letter);
 
     Serial.printf("Letter: %s -> %s\n", letter.c_str(), morse.c_str());
