@@ -14,13 +14,15 @@ struct PersistedHelloWorldConfig {
   int32_t ledGpio;
   uint8_t invertLed;
   int32_t dit;
+  char text[32];
 };
 
 bool configsEqual(const HelloWorldConfig &left, const HelloWorldConfig &right) {
   return left.helloWorldRunning == right.helloWorldRunning
       && left.ledGpio == right.ledGpio
-  && left.invertLed == right.invertLed
-  && left.dit == right.dit;
+      && left.invertLed == right.invertLed
+      && left.dit == right.dit
+      && left.text == right.text;
 }
 
 bool isValidLedGpio(int ledGpio) {
@@ -53,25 +55,27 @@ bool loadConfigFromEeprom(HelloWorldConfig &config) {
   config.ledGpio = loadedGpio;
   config.invertLed = persisted.invertLed != 0;
   config.dit = loadedDit;
+  config.text = String(persisted.text);
   return true;
 }
 
 bool saveConfigToEeprom(const HelloWorldConfig &config) {
-  PersistedHelloWorldConfig persisted = {
-    EEPROM_CONFIG_MAGIC,
-    EEPROM_CONFIG_VERSION,
-    static_cast<uint8_t>(config.helloWorldRunning ? 1 : 0),
-    static_cast<int32_t>(config.ledGpio),
-    static_cast<uint8_t>(config.invertLed ? 1 : 0),
-    static_cast<int32_t>(config.dit)
-  };
+  PersistedHelloWorldConfig persisted = {};
+  persisted.magic = EEPROM_CONFIG_MAGIC;
+  persisted.version = EEPROM_CONFIG_VERSION;
+  persisted.helloWorldRunning = static_cast<uint8_t>(config.helloWorldRunning ? 1 : 0);
+  persisted.ledGpio = static_cast<int32_t>(config.ledGpio);
+  persisted.invertLed = static_cast<uint8_t>(config.invertLed ? 1 : 0);
+  persisted.dit = static_cast<int32_t>(config.dit);
+  strncpy(persisted.text, config.text.c_str(), sizeof(persisted.text) - 1);
+  persisted.text[sizeof(persisted.text) - 1] = '\0';
 
   EEPROM.put(EEPROM_CONFIG_ADDRESS, persisted);
   return EEPROM.commit();
 }
 }  // namespace
 
-void initConfigFromEeprom(HelloWorldConfig &config, int defaultLedGpio, bool defaultInvertLed, int defaultDit) {
+void initConfigFromEeprom(HelloWorldConfig &config, int defaultLedGpio, bool defaultInvertLed, int defaultDit, const char *defaultText) {
   EEPROM.begin(EEPROM_SIZE_BYTES);
 
   if (loadConfigFromEeprom(config)) {
@@ -83,6 +87,7 @@ void initConfigFromEeprom(HelloWorldConfig &config, int defaultLedGpio, bool def
   config.ledGpio = defaultLedGpio;
   config.invertLed = defaultInvertLed;
   config.dit = defaultDit;
+  config.text = String(defaultText);
   if (saveConfigToEeprom(config)) {
     Serial.println("[config] Stored default configuration to EEPROM");
   } else {

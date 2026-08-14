@@ -60,28 +60,34 @@ void printPromptHelp() {
   Serial.println("[prompt]   toggleLedInvert      - Toggle LED invert state");
   Serial.println("[prompt]   getDit               - Show Morse dit in ms");
   Serial.println("[prompt]   setDit <ms>          - Set Morse dit (20..2000)");
+  Serial.println("[prompt]   getText              - Show current text");
+  Serial.println("[prompt]   setText <text>       - Set Morse text");
   Serial.println("[prompt]   test_r               - Output Morse R (.-.) once");
 }
 
 void processCommand(String command, HelloWorldConfig &config) {
+  const String originalCommand = command;
   command.trim();
-  command.toLowerCase();
+  String commandLower = command;
+  commandLower.toLowerCase();
 
-  if (command == "help") {
+  if (commandLower == "help") {
     printPromptHelp();
-  } else if (command == "start") {
+  } else if (commandLower == "start") {
     config.helloWorldRunning = true;
     Serial.println("[prompt] Hello World loop started");
-  } else if (command == "stop") {
+  } else if (commandLower == "stop") {
     config.helloWorldRunning = false;
     Serial.println("[prompt] Hello World loop stopped");
-  } else if (command == "getledgpio") {
+  } else if (commandLower == "getledgpio") {
     Serial.printf("[prompt] Current LED GPIO: %d\n", config.ledGpio);
-  } else if (command == "getledinvert") {
+  } else if (commandLower == "getledinvert") {
     Serial.printf("[prompt] LED inverted: %s\n", config.invertLed ? "yes" : "no");
-  } else if (command == "getdit") {
+  } else if (commandLower == "getdit") {
     Serial.printf("[prompt] Current dit: %d ms\n", config.dit);
-  } else if (command.startsWith("setledgpio")) {
+  } else if (commandLower == "gettext") {
+    Serial.printf("[prompt] Current text: %s\n", config.text.c_str());
+  } else if (commandLower.startsWith("setledgpio")) {
     String value = command.substring(String("setledgpio").length());
     value.trim();
 
@@ -99,7 +105,7 @@ void processCommand(String command, HelloWorldConfig &config) {
     config.ledGpio = newLedGpio;
     pinMode(config.ledGpio, OUTPUT);
     Serial.printf("[prompt] LED GPIO set to %d\n", config.ledGpio);
-  } else if (command.startsWith("setdit")) {
+  } else if (commandLower.startsWith("setdit")) {
     String value = command.substring(String("setdit").length());
     value.trim();
 
@@ -121,10 +127,26 @@ void processCommand(String command, HelloWorldConfig &config) {
 
     config.dit = newDit;
     Serial.printf("[prompt] dit set to %d ms\n", config.dit);
-  } else if (command == "toggleledinvert") {
+  } else if (commandLower.startsWith("settext")) {
+    String value = originalCommand.substring(String("settext").length());
+    value.trim();
+
+    if (value.length() == 0) {
+      Serial.println("[prompt] Usage: setText <text>");
+      return;
+    }
+
+    if (value == config.text) {
+      Serial.printf("[prompt] text remains: %s\n", config.text.c_str());
+      return;
+    }
+
+    config.text = value;
+    Serial.printf("[prompt] text set to: %s\n", config.text.c_str());
+  } else if (commandLower == "toggleledinvert") {
     config.invertLed = !config.invertLed;
     Serial.printf("[prompt] LED inverted: %s\n", config.invertLed ? "yes" : "no");
-  } else if (command == "test_r") {
+  } else if (commandLower == "test_r") {
     Serial.println("[prompt] Test Morse R (.-.)");
     outputMorseR(config.ledGpio, config.invertLed, config.dit);
   } else if (command.length() > 0) {
@@ -138,6 +160,7 @@ void initSerialPromt(const HelloWorldConfig &config) {
   Serial.printf("[prompt] Current LED GPIO: %d\n", config.ledGpio);
   Serial.printf("[prompt] LED inverted: %s\n", config.invertLed ? "yes" : "no");
   Serial.printf("[prompt] Current dit: %d ms\n", config.dit);
+  Serial.printf("[prompt] Current text: %s\n", config.text.c_str());
 }
 
 bool handleSerialPromt(HelloWorldConfig &config) {
