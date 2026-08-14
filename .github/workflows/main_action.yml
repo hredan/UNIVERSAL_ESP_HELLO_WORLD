@@ -70,6 +70,6 @@ jobs:
     env:
         TARGET: all
     steps:
-      - uses: hredan/eef-carefree-action@init
+      - uses: hredan/eef-carefree-action@main
         with:
           target-os: ${{env.TARGET}}
