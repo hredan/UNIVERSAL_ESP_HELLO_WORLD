@@ -75,7 +75,8 @@ bool saveConfigToEeprom(const HelloWorldConfig &config) {
 }
 }  // namespace
 
-void initConfigFromEeprom(HelloWorldConfig &config, int defaultLedGpio, bool defaultInvertLed, int defaultDit, const char *defaultText) {
+void initConfigFromEeprom(HelloWorldConfig &config, int defaultLedGpio, bool defaultInvertLed,
+  int defaultDit, const char *defaultText) {
   EEPROM.begin(EEPROM_SIZE_BYTES);
 
   if (loadConfigFromEeprom(config)) {
