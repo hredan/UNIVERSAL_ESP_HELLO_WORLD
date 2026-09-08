@@ -28,7 +28,7 @@ jobs:
             SKETCH_NAME: UNIVERSAL_ESP_HELLO_WORLD
         steps:
           - uses: actions/checkout@v6
-          - uses: hredan/eep-build-action@v1.0.0
+          - uses: hredan/eep-build-action@v1
             with:
               sketch-name: ${{env.SKETCH_NAME}}
               core: ${{ inputs.core }}
