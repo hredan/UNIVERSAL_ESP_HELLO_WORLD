@@ -70,6 +70,6 @@ jobs:
     env:
         TARGET: all
     steps:
-      - uses: hredan/eef-carefree-action@v1
+      - uses: hredan/eef-carefree-action@remove-merge-multiple
         with:
           target-os: ${{env.TARGET}}
